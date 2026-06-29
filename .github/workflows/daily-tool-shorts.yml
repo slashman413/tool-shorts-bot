@@ -1,0 +1,51 @@
+name: Daily Tool Shorts
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # 09:00 UTC = 17:00 Taipei — 每天一支工具介紹Short
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate Tool Shorts
+        env:
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: python src/generate_shorts.py --upload
+
+      - name: Archive video
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-shorts
+          path: output/*.mp4
+          retention-days: 7
+
+      - name: Save metadata
+        run: |
+          echo "generated_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
