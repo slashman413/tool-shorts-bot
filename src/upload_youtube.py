@@ -13,9 +13,9 @@ from googleapiclient.http import MediaFileUpload
 
 logger = logging.getLogger(__name__)
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
-CLIENT_ID = os.environ.get("YOUTUBE_CLIENT_ID", "")
-CLIENT_SECRET = os.environ.get("YOUTUBE_CLIENT_SECRET", "")
-REFRESH_TOKEN = os.environ.get("YOUTUBE_REFRESH_TOKEN", "")
+CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
+REFRESH_TOKEN = os.environ.get("GOOGLE_REFRESH_TOKEN", "")
 
 
 def get_authenticated_service():
