@@ -11,3 +11,5 @@ __pycache__/
 .env
 venv/
 .venv/
+client_secret.json
+output/youtube_token.json

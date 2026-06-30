@@ -230,8 +230,8 @@ def process_video(
     # 字幕樣式設定（使用通用字型）
     subtitle_style = (
         "FontName=Arial,FontSize=36,PrimaryColour=&H00FFFFFF,"
-        "BackColour=&H80000000,Bold=1,Alignment=10,"
-        "BorderStyle=3,Outline=2,Shadow=1,MarginV=24"
+        "BackColour=&H00000000,Bold=1,Alignment=10,"
+        "BorderStyle=1,Outline=2,Shadow=1,MarginV=24"
     )
 
     tmp_looped = TMP_DIR / "looped_video.mp4"
