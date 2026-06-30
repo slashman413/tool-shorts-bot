@@ -229,7 +229,7 @@ def process_video(
     # SRT 字幕至 ASS (FFmpeg 原生支援 SRT)
     # 字幕樣式設定（使用通用字型）
     subtitle_style = (
-        "FontName=Arial,FontSize=28,PrimaryColour=&H00FFFFFF,"
+        "FontName=Noto Sans CJK SC,FontSize=28,PrimaryColour=&H00FFFFFF,"
         "BackColour=&H00000000,Bold=1,Alignment=10,"
         "BorderStyle=1,Outline=1,Shadow=0,MarginV=24"
     )
