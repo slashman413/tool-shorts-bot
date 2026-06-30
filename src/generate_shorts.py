@@ -229,9 +229,9 @@ def process_video(
     # SRT 字幕至 ASS (FFmpeg 原生支援 SRT)
     # 字幕樣式設定（使用通用字型）
     subtitle_style = (
-        "FontName=Arial,FontSize=36,PrimaryColour=&H00FFFFFF,"
+        "FontName=Arial,FontSize=28,PrimaryColour=&H00FFFFFF,"
         "BackColour=&H00000000,Bold=1,Alignment=10,"
-        "BorderStyle=1,Outline=2,Shadow=1,MarginV=24"
+        "BorderStyle=1,Outline=1,Shadow=0,MarginV=24"
     )
 
     tmp_looped = TMP_DIR / "looped_video.mp4"
