@@ -55,14 +55,31 @@ def upload_video(video_path: str, tools: list[dict], script: str):
     for i, t in enumerate(tools, 1):
         desc_lines.append(f"{i}. {t['name']} — {t['tagline']}")
         desc_lines.append(f"   🔗 {t['url']}")
+    
+    # Randomly pick 1-2 Ko-fi products to promote
+    kofi_products = [
+        "🎬 自動生成這種 Shorts？👉 ShortsGen Pro → https://ko-fi.com/s/896aa3c229",
+        "📊 台股即時訊號掃描 👉 TWSE Premium → https://ko-fi.com/s/b99720d13d",
+        "🛒 自動追蹤 Amazon 特價 👉 Deal Finder Pro → https://ko-fi.com/s/5730f8f947",
+        "📝 自動生成 SEO 文章 👉 SEO Content Engine → https://ko-fi.com/s/a03f0a8e3b",
+    ]
+    selected_kofi = random.sample(kofi_products, min(2, len(kofi_products)))
+    
     desc_lines += [
         "",
         "🎬 影片來源：Pixabay (Royalty-Free)",
         "🎙️ AI 語音 + 同步字幕",
         "",
+        "🔥 更多免費工具 & 自動化服務：",
+    ]
+    desc_lines.extend(f"• {p}" for p in selected_kofi)
+    desc_lines += [
+        "",
+        "🔧 全部工具：https://slashmantools.us/tools/",
+        "",
         "🔔 喜歡的話幫我按讚、分享、訂閱！",
         "",
-        "#Shorts #免費工具 #生產力工具 #線上工具",
+        "#Shorts #免費工具 #生產力工具 #線上工具 #ShortsGen",
     ]
 
     body = {
