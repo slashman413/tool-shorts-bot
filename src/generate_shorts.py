@@ -128,58 +128,55 @@ def fetch_pixabay_video(api_key: str, output_path: Path) -> Path:
     """從 Pixabay 下載 720x1280 直式影片"""
     # 搜尋關鍵字 — 偏科技/城市/辦公室風格
     queries = [
-        "nature", "abstract", "technology",
-        "landscape", "sunset", "city lights",
+        "nature landscape", "sunset ocean", "city night",
+        "mountain lake", "forest river", "beach waves",
+        "sky clouds", "stars night", "aurora borealis",
     ]
     query = random.choice(queries)
 
     url = "https://pixabay.com/api/videos/"
-    params = {
-        "key": api_key,
-        "q": query,
-        "orientation": "vertical",
-        "per_page": 20,
-    }
-    resp = requests.get(url, params=params, timeout=15)
-    resp.raise_for_status()
-    data = resp.json()
-
-    if not data.get("hits"):
-        # Fallback: try with broader query
-        params["q"] = random.choice(["abstract background 4k", "nature animation", "digital art"])
-        params["orientation"] = "vertical"
+    
+    # Try up to 3 different queries to find portrait videos
+    for attempt in range(3):
+        params = {
+            "key": api_key,
+            "q": query,
+            "orientation": "vertical",
+            "per_page": 20,
+        }
         resp = requests.get(url, params=params, timeout=15)
         resp.raise_for_status()
         data = resp.json()
 
-    if not data.get("hits"):
-        raise RuntimeError(f"No videos found")
-
-    # 只選直式影片 (height > width)
-    portrait_hits = []
-    for hit in data["hits"]:
-        videos = hit.get("videos", {})
-        for fmt in ["medium", "large", "small"]:
-            v = videos.get(fmt)
-            if v and v.get("width") and v.get("height"):
-                w, hgt = v["width"], v["height"]
-                if hgt > w and w >= 360 and hgt >= 640:
-                    portrait_hits.append((w, hgt, v, hit))
-                break
-
-    if not portrait_hits:
-        raise RuntimeError("No portrait videos found")
-
-    # Prefer 720x1280 or close
-    portrait_hits.sort(key=lambda x: abs(x[0] - 720) + abs(x[1] - 1280))
-    best = portrait_hits[0][2]
-    print(f"  📹 Video: {best['width']}x{best['height']} from {best['url']}")
-
-    video_url = best["url"]
-    r = requests.get(video_url, timeout=30)
-    r.raise_for_status()
-    output_path.write_bytes(r.content)
-    return output_path
+        if data.get("hits"):
+            # 只選直式影片
+            portrait_hits = []
+            for hit in data["hits"]:
+                videos = hit.get("videos", {})
+                for fmt in ["medium", "large", "small"]:
+                    v = videos.get(fmt)
+                    if v and v.get("width") and v.get("height"):
+                        w, hgt = v["width"], v["height"]
+                        if hgt > w:  # portrait orientation
+                            portrait_hits.append((w, hgt, v, hit))
+                        break
+            
+            if portrait_hits:
+                portrait_hits.sort(key=lambda x: abs(x[0] - 720) + abs(x[1] - 1280))
+                best = portrait_hits[0][2]
+                print(f"  📹 Video: {best['width']}x{best['height']} from {best['url']}")
+                
+                video_url = best["url"]
+                r = requests.get(video_url, timeout=30)
+                r.raise_for_status()
+                output_path.write_bytes(r.content)
+                return output_path
+        
+        # Try a different query
+        print(f"  Retry {attempt+1}: no portrait videos for '{query}', trying another...")
+        query = random.choice(queries)
+    
+    raise RuntimeError("No portrait videos found after 3 attempts")
 
 
 def gen_background_music(output_path: Path, duration: float) -> Path:
