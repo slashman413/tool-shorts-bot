@@ -15,6 +15,8 @@ TOOLS_URL = "https://slashmantools.us/tools/"
 
 # ── 工具資料（手動維護，保持精準） ──
 TOOLS = [
+    {"name": "AI Bio Generator", "url": "https://slashman413.github.io/bio-generator/",
+     "tagline": "免費 AI 個人簡介產生器，支援 Instagram、LinkedIn、Twitter 跟 TikTok"},
     {"name": "LLM VRAM Calculator", "url": "https://slashmantools.us/llm-calc/",
      "tagline": "估算跑本地 LLM 需要的 VRAM 跟 RAM，支援 7B 到 405B 模型"},
     {"name": "Token Cost Calculator", "url": "https://slashmantools.us/token-cost-calculator/",
